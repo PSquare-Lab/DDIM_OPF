@@ -1,0 +1,5 @@
+venv/
+venv/*
+*.pth
+__pycache__/
+*.csv
