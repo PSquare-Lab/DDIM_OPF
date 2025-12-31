@@ -3,3 +3,4 @@ venv/*
 *.pth
 __pycache__/
 *.csv
+*.png

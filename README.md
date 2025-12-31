@@ -49,6 +49,23 @@ python main.py --ppcase case6ww --sample --samples 1000
 - By default, this will use DDPM sampling. To use DDIM, add `--ddim`.
 - Make sure the checkpoint file (`best_ddim_denoiser.pth`) exists from a previous training run.
 
+### 4. Data Analysis and Visualization
+
+The `example.py` script provides a quick way to analyze and visualize the results of your actual and generated datasets. It computes key metrics (KL divergence, Wasserstein distance) and generates comparison plots for selected features and buses.
+
+- Histogram comparison for selected features (customizable in the script)
+- Scatter plots for P vs Q and V vs Theta for selected buses
+- Buswise KL divergence bar plots for all features
+
+**How to use:**
+1. Ensure you have your ground truth and generated CSV files (e.g., `test_data.csv` and `generated.csv`).
+2. Edit the top of `example.py` to select which features/buses to plot, if desired.
+3. Run:
+
+```sh
+python example.py
+```
+
 ## Notes
 - You can use any supported pandapower case by changing the `--ppcase` argument.
 - For other bus systems, adjust the dataset generation and training commands accordingly.
