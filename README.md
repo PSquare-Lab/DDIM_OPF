@@ -95,7 +95,7 @@ The neural network consists of **three hidden layers**, each with **4096 neurons
 | **Hyperparameter**             | **Value**                    |
 | ------------------------------ | ---------------------------- |
 | Diffusion steps (T)            | 1000                         |
-| (\beta_{\min})                 | $$v1 \times 10^{-4}$$        |
+| (\beta_{\min})                 | $$1 \times 10^{-4}$$        |
 | (\beta_{\max})                 | $$2 \times 10^{-2}$$         |
 | Noise schedule                 | Linear                       |
 | Epochs                         | 700–1000                     |
@@ -104,7 +104,7 @@ The neural network consists of **three hidden layers**, each with **4096 neurons
 | Batch size                     | 64                           |
 | Optimizer                      | AdamW                        |
 | Learning rate                  | $$1 \times 10^{-4}$$         |
-| Weight decay                   | $$ 1 \times 10^{-3}$$        |
+| Weight decay                   | $$1 \times 10^{-3}$$        |
 | Activation function            | SiLU                         |
 | Hidden layers                  | [4096, 4096, 4096]           |
 | Normalization                  | LayerNorm                    |
