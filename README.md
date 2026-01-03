@@ -81,10 +81,10 @@ To construct the training data, we repeatedly solve the AC Optimal Power Flow (A
 ### Training and Inference Setup
 
 The diffusion model is trained for **T = 1000** time steps using a **linear noise schedule**, with
-(\beta_{\min} = 1 \times 10^{-4}) and (\beta_{\max} = 2 \times 10^{-2}).
+$$\beta_{\min} = 1 \times 10^{-4}$$ and $$\beta_{\max} = 2 \times 10^{-2}$$.
 
-For inference, we use **DDIM sampling** with **30 steps** and a stochasticity parameter of **(\eta = 0.2)**.
-Training is performed using the **AdamW optimizer** with a learning rate of **(1 \times 10^{-4})** and weight decay of **(1 \times 10^{-3})**, and a batch size of **64**.
+For inference, we use **DDIM sampling** with **30 steps** and a stochasticity parameter of **$$\eta$$ = 0.2**.
+Training is performed using the **AdamW optimizer** with a learning rate of **$$1 \times 10^{-4}$$** and weight decay of **$$1 \times 10^{-3}$$**, and a batch size of **64**.
 
 The neural network consists of **three hidden layers**, each with **4096 neurons**, and uses the **SiLU** activation function with **Layer Normalization** throughout. All experiments are conducted on **NVIDIA A100 GPUs**.
 
@@ -95,16 +95,16 @@ The neural network consists of **three hidden layers**, each with **4096 neurons
 | **Hyperparameter**             | **Value**                    |
 | ------------------------------ | ---------------------------- |
 | Diffusion steps (T)            | 1000                         |
-| (\beta_{\min})                 | (1 \times 10^{-4})           |
-| (\beta_{\max})                 | (2 \times 10^{-2})           |
+| (\beta_{\min})                 | $$v1 \times 10^{-4}$$        |
+| (\beta_{\max})                 | $$2 \times 10^{-2}$$         |
 | Noise schedule                 | Linear                       |
 | Epochs                         | 700–1000                     |
 | DDIM steps (inference)         | 30 (unless stated otherwise) |
 | Stochasticity parameter (\eta) | 0.2                          |
 | Batch size                     | 64                           |
 | Optimizer                      | AdamW                        |
-| Learning rate                  | (1 \times 10^{-4})           |
-| Weight decay                   | (1 \times 10^{-3})           |
+| Learning rate                  | $$1 \times 10^{-4}$$         |
+| Weight decay                   | $$ 1 \times 10^{-3}$$        |
 | Activation function            | SiLU                         |
 | Hidden layers                  | [4096, 4096, 4096]           |
 | Normalization                  | LayerNorm                    |
