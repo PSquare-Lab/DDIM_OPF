@@ -7,11 +7,16 @@ from tqdm import tqdm
 from .utils import denormalize
 from .physics import RH_sq, RG_sq
 
+
+def apply_zero_threshold(data, threshold=1e-6):
+	data[np.abs(data) <= threshold] = 0.0
+	return data
+
 def make_ddim_timesteps(TIMESTEPS, ddim_steps, device):
 	step = TIMESTEPS // ddim_steps
 	return torch.arange(TIMESTEPS - 1, -1, -step, device=device, dtype=torch.long)
 
-def ddim_sample(n_samples, model, NUM_FEATURES, cols, range_eps, xmin, alphas_cumprod, G, B, p_min, p_max, q_min, q_max, v_min, v_max, TIMESTEPS, DDIM_STEPS, GUIDANCE_LAMBDA, ETA, batch_size=1000, OUT_CSV="ddim_stochastic_constrained_generated.csv", device="cpu"):
+def ddim_sample(n_samples, model, NUM_FEATURES, cols, range_eps, xmin, alphas_cumprod, G, B, p_min, p_max, q_min, q_max, v_min, v_max, TIMESTEPS, DDIM_STEPS, GUIDANCE_LAMBDA, ETA, batch_size=1000, OUT_CSV="ddim_stochastic_constrained_generated.csv", device="cpu", zero_threshold=1e-6):
 	print(f"Sampling {n_samples} samples using stochastic DDIM in batches of {batch_size}...")
 	total_start_time = time.time()
 	total_generated = 0
@@ -61,6 +66,10 @@ def ddim_sample(n_samples, model, NUM_FEATURES, cols, range_eps, xmin, alphas_cu
 		gen_norm = x_t.cpu().numpy()
 		gen_denorm = denormalize(gen_norm, xmin, range_eps)
 		gen_denorm = np.nan_to_num(gen_denorm, nan=0.0, posinf=0.0, neginf=0.0)
+		
+		# Set very small values to zero (for zero-injection/slack buses)
+		gen_denorm = apply_zero_threshold(gen_denorm, threshold=zero_threshold)
+		
 		df_batch = pd.DataFrame(gen_denorm, columns=cols)
 		df_batch.to_csv(OUT_CSV, mode='a', index=False, header=not os.path.exists(OUT_CSV))
 		batch_end_time = time.time()
@@ -70,7 +79,7 @@ def ddim_sample(n_samples, model, NUM_FEATURES, cols, range_eps, xmin, alphas_cu
 	total_duration = time.time() - total_start_time
 	print(f"Sampling Complete. Total time: {total_duration:.2f} seconds.")
 
-def ddpm_sample(n_samples, model, NUM_FEATURES, cols, range_eps, xmin, alphas, betas, alphas_cumprod, G, B, p_min, p_max, q_min, q_max, v_min, v_max, TIMESTEPS, GUIDANCE_LAMBDA, batch_size=1000, OUT_CSV="ddpm_constrained_generated.csv", device="cpu"):
+def ddpm_sample(n_samples, model, NUM_FEATURES, cols, range_eps, xmin, alphas, betas, alphas_cumprod, G, B, p_min, p_max, q_min, q_max, v_min, v_max, TIMESTEPS, GUIDANCE_LAMBDA, batch_size=1000, OUT_CSV="ddpm_constrained_generated.csv", device="cpu", zero_threshold=1e-6):
 	print(f"Sampling {n_samples} samples using standard DDPM in batches of {batch_size}...")
 	total_start_time = time.time()
 	total_generated = 0
@@ -108,6 +117,10 @@ def ddpm_sample(n_samples, model, NUM_FEATURES, cols, range_eps, xmin, alphas, b
 			x_t = coef_x * x_t + coef_x0 * x0_guided + torch.sqrt(sigma_t) * z
 		gen_denorm = denormalize(x_t.detach().cpu().numpy(), xmin, range_eps)
 		gen_denorm = np.nan_to_num(gen_denorm, nan=0.0, posinf=0.0, neginf=0.0)
+		
+		# Set very small values to zero (for zero-injection/slack buses)
+		gen_denorm = apply_zero_threshold(gen_denorm, threshold=zero_threshold)
+		
 		df_batch = pd.DataFrame(gen_denorm, columns=cols)
 		df_batch.to_csv(OUT_CSV, mode='a', index=False, header=not os.path.exists(OUT_CSV))
 		batch_duration = time.time() - batch_start_time
