@@ -9,7 +9,7 @@ COLOR_GEN = "#DC143C"
 
 
 # For histograms, specify any 4 columns (e.g., 'P1', 'Q3', 'P4', 'V9')
-histogram_cols = ['P1', 'Q3', 'P4', 'V9']
+histogram_cols = ['P1', 'Q3', 'P4', 'V1']
 # For scatter plots, specify bus indices (0-based) for which to plot P vs Q and V vs Theta
 scatter_buses = [0, 1, 2, 3]
 
@@ -80,15 +80,15 @@ plt.close()
 
 # 3. Mean KL divergence and W1 distance for selected features
 kl_vals = []
-for p_col, q_col, v_col, t_col in zip(selected_p, selected_q, selected_v, selected_theta):
+for p_col, q_col, v_col, t_col in zip(p_cols, q_cols, v_cols, theta_cols):
 	kl_vals.append(kl_divergence(actual[p_col], generated[p_col]))
 	kl_vals.append(kl_divergence(actual[q_col], generated[q_col]))
 	kl_vals.append(kl_divergence(actual[v_col], generated[ v_col]))
 	kl_vals.append(kl_divergence(actual[t_col], generated[t_col]))
 mean_kl = np.mean(kl_vals)
-print(f"Mean KL divergence (selected features): {mean_kl:.4f}")
+print(f"Mean KL divergence: {mean_kl:.4f}")
 
-w1 = calculate_w1_distance_for_eta(actual, generated, selected_p, selected_q, selected_v, selected_theta)
+w1 = calculate_w1_distance_for_eta(actual, generated, p_cols, q_cols, v_cols, theta_cols)
 print(f"W1 distance (selected features): {w1:.4f}")
 
 # 4. Buswise KL divergence: one subplot per feature, bar plot per bus
