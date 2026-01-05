@@ -38,5 +38,4 @@ def calculate_w1_distance_for_eta(actual_df, gen_df, p_cols, q_cols, v_cols, the
     b = np.ones(m) / m
     M = cdist(data_gt, data_syn, metric='euclidean')
     wasserstein_dist = ot.emd2(a, b, M)
-    print("P Q V Theta W1 distance:", wasserstein_dist)
     return wasserstein_dist
