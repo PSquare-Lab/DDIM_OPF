@@ -9,7 +9,6 @@ from src.generate_dataset import generate_opf_dataset_pp
 # --- Config ---
 NUM_BUS = 6
 BASE_MVA = 100
-DATA_CSV = "actual_data_6.csv"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 NUM_FEATURES = 4 * NUM_BUS
 BATCH_SIZE = 64
@@ -54,11 +53,13 @@ def main():
     # --- Data & Network ---
     import pandapower.networks as pn
     net = getattr(pn, args.ppcase)()
+    NUM_BUS = len(net.bus)
+    NUM_FEATURES = 4 * NUM_BUS
     G_np, B_np = load_ybus(net)
     G = torch.tensor(G_np, dtype=torch.float32, device=DEVICE)
     B = torch.tensor(B_np, dtype=torch.float32, device=DEVICE)
 
-    data, cols = load_data(DATA_CSV, NUM_FEATURES)
+    data, cols = load_data(args.dataset_save_path, NUM_FEATURES)
     xmin, xmax = data.min(axis=0), data.max(axis=0)
     range_eps = (xmax - xmin).copy()
     range_eps[range_eps == 0] = 1e-6
