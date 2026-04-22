@@ -1,5 +1,15 @@
 # DDIM_OPF
 
+```
+@article{shekhar2026fast,
+  title={Fast Diffusion with Physics-Correction for ACOPF},
+  author={Shekhar, Shashank and Karn, Abhinav and Keshav, Kris and Bansal, Shivam and Pareek, Parikshit},
+  journal={arXiv preprint arXiv:2602.03020},
+  year={2026}
+}
+```
+
+
 ## Setup Instructions
 
 1. **Clone the repository**
