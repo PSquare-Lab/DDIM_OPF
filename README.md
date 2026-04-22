@@ -1,5 +1,8 @@
 # DDIM_OPF
 
+This repository contains the official implementation of the paper “Fast Diffusion with Physics-Correction for ACOPF.”
+It provides code and resources to reproduce the methods and results presented in the paper. [Pre-Print](https://arxiv.org/pdf/2602.03020)
+
 ```
 @article{shekhar2026fast,
   title={Fast Diffusion with Physics-Correction for ACOPF},
